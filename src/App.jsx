@@ -1,4 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
+import { ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import { buildTheme } from './theme.js'
 import Header from './components/Header.jsx'
 import AddBookmarkForm from './components/AddBookmarkForm.jsx'
 import Toolbar from './components/Toolbar.jsx'
@@ -38,14 +44,15 @@ export default function App() {
   const [editingId, setEditingId] = useState(null)
   const [isDark, setIsDark] = useState(() => loadTheme())
 
+  const theme = useMemo(() => buildTheme(isDark ? 'dark' : 'light'), [isDark])
+
   // Persist bookmarks
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks))
   }, [bookmarks])
 
-  // Persist + apply theme
+  // Persist theme
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
     localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light')
   }, [isDark])
 
@@ -92,9 +99,10 @@ export default function App() {
   const nonAllCategories = categories.filter(c => c !== 'All')
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Header isDark={isDark} onToggleDark={() => setIsDark(d => !d)} />
-      <main>
+      <Container maxWidth="lg" sx={{ py: 3 }}>
         <AddBookmarkForm categories={nonAllCategories} onAdd={handleAdd} />
         <Toolbar
           searchQuery={searchQuery}
@@ -103,10 +111,18 @@ export default function App() {
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
         />
-        <div className="stats-bar">
-          Showing <span>{filteredBookmarks.length}</span> of <span>{bookmarks.length}</span> bookmark{bookmarks.length !== 1 ? 's' : ''}
-        </div>
-        <div className="cards-grid">
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Showing{' '}
+          <Box component="span" sx={{ color: 'primary.main', fontWeight: 600 }}>
+            {filteredBookmarks.length}
+          </Box>
+          {' '}of{' '}
+          <Box component="span" sx={{ color: 'primary.main', fontWeight: 600 }}>
+            {bookmarks.length}
+          </Box>
+          {' '}bookmark{bookmarks.length !== 1 ? 's' : ''}
+        </Typography>
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 2 }}>
           {filteredBookmarks.length === 0 ? (
             <EmptyState hasBookmarks={bookmarks.length > 0} />
           ) : (
@@ -122,8 +138,8 @@ export default function App() {
               />
             ))
           )}
-        </div>
-      </main>
-    </>
+        </Box>
+      </Container>
+    </ThemeProvider>
   )
 }

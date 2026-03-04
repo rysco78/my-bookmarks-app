@@ -1,4 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardActions from '@mui/material/CardActions'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
+import Divider from '@mui/material/Divider'
+import Link from '@mui/material/Link'
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+
+const fadeIn = {
+  '@keyframes fadeIn': {
+    from: { opacity: 0, transform: 'translateY(6px)' },
+    to: { opacity: 1, transform: 'translateY(0)' },
+  },
+  animation: 'fadeIn 0.2s ease',
+}
 
 export default function BookmarkCard({ bookmark, isEditing, onEdit, onSave, onCancel, onDelete }) {
   const [fields, setFields] = useState({
@@ -44,51 +66,95 @@ export default function BookmarkCard({ bookmark, isEditing, onEdit, onSave, onCa
 
   if (isEditing) {
     return (
-      <div className="card">
-        <div className="card-edit-form" onKeyDown={handleKeyDown}>
-          <input ref={titleRef} type="text" name="title" value={fields.title} onChange={handleChange} placeholder="Title" required />
-          <input type="url" name="url" value={fields.url} onChange={handleChange} placeholder="https://..." />
-          <input type="text" name="category" value={fields.category} onChange={handleChange} placeholder="Category" list="category-list" />
-          <input type="text" name="notes" value={fields.notes} onChange={handleChange} placeholder="Notes" />
-          <div className="card-edit-actions">
-            <button className="btn-save" onClick={handleSave}>Save</button>
-            <button className="btn-cancel" onClick={onCancel}>Cancel</button>
-          </div>
-        </div>
-      </div>
+      <Card sx={fadeIn} onKeyDown={handleKeyDown}>
+        <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+          <TextField
+            inputRef={titleRef}
+            size="small"
+            fullWidth
+            label="Title"
+            name="title"
+            value={fields.title}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            size="small"
+            fullWidth
+            label="URL"
+            name="url"
+            type="url"
+            value={fields.url}
+            onChange={handleChange}
+          />
+          <TextField
+            size="small"
+            fullWidth
+            label="Category"
+            name="category"
+            value={fields.category}
+            onChange={handleChange}
+            inputProps={{ list: 'category-list' }}
+          />
+          <TextField
+            size="small"
+            fullWidth
+            label="Notes"
+            name="notes"
+            value={fields.notes}
+            onChange={handleChange}
+          />
+        </CardContent>
+        <CardActions sx={{ px: 2, pb: 2 }}>
+          <Button variant="contained" size="small" onClick={handleSave}>Save</Button>
+          <Button variant="outlined" color="inherit" size="small" onClick={onCancel}>Cancel</Button>
+        </CardActions>
+      </Card>
     )
   }
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <div className="card-title">{bookmark.title}</div>
-        <div className="card-actions">
-          <button className="card-btn edit" onClick={() => onEdit(bookmark.id)} title="Edit bookmark" aria-label={`Edit ${bookmark.title}`}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-          </button>
-          <button className="card-btn delete" onClick={() => onDelete(bookmark.id)} title="Delete bookmark" aria-label={`Delete ${bookmark.title}`}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-              <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div className="card-url">
-        <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-            <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-          </svg>
+    <Card
+      sx={{
+        ...fadeIn,
+        transition: 'box-shadow 0.2s, transform 0.2s',
+        '&:hover': { boxShadow: 6, transform: 'translateY(-2px)' },
+      }}
+    >
+      <CardContent>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+          <Typography variant="subtitle1" fontWeight={600} sx={{ flexGrow: 1, mr: 1 }}>
+            {bookmark.title}
+          </Typography>
+          <Box>
+            <IconButton size="small" onClick={() => onEdit(bookmark.id)} aria-label={`Edit ${bookmark.title}`}>
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton size="small" color="error" onClick={() => onDelete(bookmark.id)} aria-label={`Delete ${bookmark.title}`}>
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        </Box>
+        <Link
+          href={bookmark.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="body2"
+          sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: bookmark.category || bookmark.notes ? 1.5 : 0 }}
+        >
+          <OpenInNewIcon sx={{ fontSize: 13 }} />
           {domain}
-        </a>
-      </div>
-      {bookmark.category && <div><span className="card-badge">{bookmark.category}</span></div>}
-      {bookmark.notes && <div className="card-notes">{bookmark.notes}</div>}
-    </div>
+        </Link>
+        {(bookmark.category || bookmark.notes) && <Divider sx={{ mb: 1.5 }} />}
+        {bookmark.category && (
+          <Chip label={bookmark.category} variant="outlined" size="small" sx={{ mb: bookmark.notes ? 1 : 0 }} />
+        )}
+        {bookmark.notes && (
+          <Typography variant="body2" color="text.secondary" sx={{ mt: bookmark.category ? 1 : 0 }}>
+            {bookmark.notes}
+          </Typography>
+        )}
+      </CardContent>
+    </Card>
   )
 }

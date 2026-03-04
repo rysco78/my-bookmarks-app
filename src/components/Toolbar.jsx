@@ -1,29 +1,38 @@
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
+import Chip from '@mui/material/Chip'
+import SearchIcon from '@mui/icons-material/Search'
+
 export default function Toolbar({ searchQuery, onSearch, categories, activeCategory, onCategoryChange }) {
   return (
-    <div className="toolbar">
-      <div className="search-wrap">
-        <svg className="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input
-          type="search"
-          className="search-input"
-          placeholder="Search bookmarks..."
-          value={searchQuery}
-          onChange={e => onSearch(e.target.value)}
-        />
-      </div>
-      <div className="category-filters">
+    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, mb: 2, alignItems: { sm: 'center' } }}>
+      <TextField
+        size="small"
+        placeholder="Search bookmarks..."
+        value={searchQuery}
+        onChange={e => onSearch(e.target.value)}
+        sx={{ minWidth: 220, flexShrink: 0 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon fontSize="small" />
+            </InputAdornment>
+          ),
+        }}
+      />
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
         {categories.map(cat => (
-          <button
+          <Chip
             key={cat}
-            className={`filter-btn${cat === activeCategory ? ' active' : ''}`}
+            label={cat}
+            color={cat === activeCategory ? 'primary' : 'default'}
+            variant={cat === activeCategory ? 'filled' : 'outlined'}
             onClick={() => onCategoryChange(cat)}
-          >
-            {cat}
-          </button>
+            size="small"
+          />
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }

@@ -1,11 +1,17 @@
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+
 export default function EmptyState({ hasBookmarks }) {
   return (
-    <div className="empty-state">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-      </svg>
-      <h3>{hasBookmarks ? 'No results found' : 'No bookmarks yet'}</h3>
-      <p>{hasBookmarks ? 'Try a different search or category.' : 'Add your first bookmark above.'}</p>
-    </div>
+    <Box sx={{ gridColumn: '1 / -1', textAlign: 'center', py: 10, color: 'text.secondary' }}>
+      <BookmarkBorderIcon sx={{ fontSize: 64, mb: 2, opacity: 0.4 }} />
+      <Typography variant="h6" gutterBottom>
+        {hasBookmarks ? 'No results found' : 'No bookmarks yet'}
+      </Typography>
+      <Typography variant="body2">
+        {hasBookmarks ? 'Try a different search or category.' : 'Add your first bookmark above.'}
+      </Typography>
+    </Box>
   )
 }

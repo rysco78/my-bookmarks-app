@@ -1,35 +1,29 @@
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import Box from '@mui/material/Box'
+import BookmarkIcon from '@mui/icons-material/Bookmark'
+import Brightness4Icon from '@mui/icons-material/Brightness4'
+import Brightness7Icon from '@mui/icons-material/Brightness7'
+
 export default function Header({ isDark, onToggleDark }) {
   return (
-    <header>
-      <div className="header-left">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-        </svg>
-        <div>
-          <h1>My Bookmarks</h1>
-          <p>Your personal bookmark dashboard</p>
-        </div>
-      </div>
-      <button className="dark-toggle" onClick={onToggleDark} aria-label="Toggle dark mode">
-        {isDark ? (
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-        ) : (
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        )}
-        <span>{isDark ? 'Light' : 'Dark'}</span>
-      </button>
-    </header>
+    <AppBar position="static">
+      <Toolbar>
+        <BookmarkIcon sx={{ mr: 1.5 }} />
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" lineHeight={1.2}>
+            My Bookmarks
+          </Typography>
+          <Typography variant="caption" sx={{ opacity: 0.8 }}>
+            Your personal bookmark dashboard
+          </Typography>
+        </Box>
+        <IconButton color="inherit" onClick={onToggleDark} aria-label="Toggle dark mode">
+          {isDark ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </Toolbar>
+    </AppBar>
   )
 }
