@@ -5,7 +5,7 @@ export function buildTheme(mode) {
     palette: {
       mode,
       primary: {
-        main: '#2563eb',
+        main: '#7c3aed',
       },
       ...(mode === 'dark' && {
         background: {
